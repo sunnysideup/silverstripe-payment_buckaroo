@@ -19,8 +19,8 @@ class BuckarooPayment extends Payment {
 	protected static $test_url = 'https://testcheckout.buckaroo.nl/html/';
 
 	// Redirect URLs
-	protected static $confirm_url = 'BuckarooPaymentPayment_Handler/confirm';
-	protected static $cancel_url = 'BuckarooPaymentPayment_Handler/cancel';
+	protected static $confirm_url = 'BuckarooPayment_Handler/confirm';
+	protected static $cancel_url = 'BuckarooPayment_Handler/cancel';
 
 	// Settings
 	protected static $website_key;
@@ -76,7 +76,7 @@ class BuckarooPayment extends Payment {
 		$signature = $fields = '';
 		ksort($inputs);
 		foreach($inputs as $name => $value) {
-			$signature .= "$name$value";
+			$signature .= "$name=$value";
 			$ATT_value = Convert::raw2att($value);
 			$fields .= "<input type=\"hidden\" name=\"$name\" value=\"$ATT_value\"/>";
 		}
