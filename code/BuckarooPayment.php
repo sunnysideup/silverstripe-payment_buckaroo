@@ -18,10 +18,6 @@ class BuckarooPayment extends Payment {
 	protected static $live_url = 'https://checkout.buckaroo.nl/html/';
 	protected static $test_url = 'https://testcheckout.buckaroo.nl/html/';
 
-	// Redirect URLs
-	protected static $confirm_url = 'BuckarooPayment_Handler/confirm';
-	protected static $cancel_url = 'BuckarooPayment_Handler/cancel';
-
 	// Settings
 	protected static $website_key;
 	protected static $signature_secret_key;
@@ -66,8 +62,8 @@ class BuckarooPayment extends Payment {
 		$inputs['brq_currency'] = $this->Amount->Currency;
 		$inputs['brq_invoicenumber'] = $this->ID;
 
-		$inputs['brq_return'] = Director::absoluteURL(self::$confirm_url, true);
-		$inputs['brq_returncancel'] = $inputs['brq_returnerror'] = $inputs['brq_returnreject'] = Director::absoluteURL(self::$cancel_url, true);
+		$inputs['brq_return'] = Director::absoluteURL(BuckarooPayment_Handler::confirm_link($this), true);
+		$inputs['brq_returncancel'] = $inputs['brq_returnerror'] = $inputs['brq_returnreject'] = Director::absoluteURL(BuckarooPayment_Handler::cancel_link($this), true);
 
 		$order = $this->Order();
 		$items = $order->Items();
@@ -122,14 +118,18 @@ HTML;
 
 class BuckarooPayment_Handler extends Controller {
 
+	static $payment_param = 'payment';
+	static $order_param = 'order';
+
 	protected $payment;
 	
 	function init() {
 		parent::init();
-		$paymentID = $this->request->getVar('brq_invoicenumber');
-		if($paymentID) {
+		$paymentID = $this->request->getVar(self::$payment_param);
+		$orderID = $this->request->getVar(self::$order_param);
+		if($paymentID && $orderID) {
 			$payment = DataObject::get_by_id('BuckarooPayment', $paymentID);
-			if($payment && $payment->Status == 'Pending') {
+			if($payment && $payment->OrderID == $orderID && $payment->Status == 'Pending') {
 				$this->payment = $payment;
 				$this->payment->Message = $this->request->getVar('brq_statusmessage');
 				$this->payment->TransactionID = $this->request->getVar('brq_payment');
@@ -161,5 +161,18 @@ class BuckarooPayment_Handler extends Controller {
 		$object = $this->payment->PaidObject();
 		$link = $object ? $object->Link() : Director::absoluteURL('home', true);
 		return Director::redirect($link);
+	}
+
+	static function confirm_link(BuckarooPayment $payment) {
+		return self::action_link('confirm', $payment);
+	}
+
+	static function cancel_link(BuckarooPayment $payment) {
+		return self::action_link('cancel', $payment);
+	}
+
+	private static function action_link($action, BuckarooPayment $payment) {
+		$values = array(self::$payment_param => $payment->ID, self::$order_param -> $payment->OrderID);
+		return "BuckarooPayment_Handler/$action?" . http_build_query($values);
 	}
 }
