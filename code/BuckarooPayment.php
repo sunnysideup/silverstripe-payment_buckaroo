@@ -4,7 +4,7 @@
  * Buckaroo Payment
  */
 class BuckarooPayment extends Payment {
-	
+
 	static $db = array(
 		'TransactionID' => 'Varchar',
 		'Method' => 'Varchar'
@@ -13,7 +13,7 @@ class BuckarooPayment extends Payment {
 	// Logo & Privacy Link
 	protected static $logo = 'payment_buckaroo/images/logo.jpg';
 	protected static $privacy_link = 'http://www.buckaroo.nl/zakelijk/over-ons/disclaimer.aspx';
-	
+
 	// URLs
 	protected static $live_url = 'https://checkout.buckaroo.nl/html/';
 	protected static $test_url = 'https://testcheckout.buckaroo.nl/html/';
@@ -22,23 +22,23 @@ class BuckarooPayment extends Payment {
 	protected static $website_key;
 	protected static $signature_secret_key;
 	protected static $test_mode = true;
-	
+
 	static function set_settings($website_key, $signature_secret_key) {
 		self::$website_key = $website_key;
 		self::$signature_secret_key = $signature_secret_key;
 	}
-	
+
 	static function set_test_mode($test_mode) {
 		self::$test_mode = $test_mode;
 	}
-	
+
 	function populateDefaults() {
 		parent::populateDefaults();
 		$this->Status = 'Pending';
  	}
 
 	function processPayment($data, $form) {
-		
+
 		// Checks credentials
 		if(! self::$website_key || ! self::$signature_secret_key) {
 			user_error('You are attempting to make a payment without the necessary credentials set', E_USER_ERROR);
@@ -47,16 +47,16 @@ class BuckarooPayment extends Payment {
 		$page = new Page();
 
 		$page->Title = 'Redirection to Buckaroo...';
-		$page->Logo = '<img src="' . self::$logo . '" alt="Payments powered by Buckaroo"/>';
+		$page->Logo = '<img src="' . self::$logo . '" alt="Payments powered by Buckaroo" class="logo buckarooLogo"/>';
 		$page->Form = $this->PaymentForm();
 
 		$controller = new Page_Controller($page);
-		
+
 		$form = $controller->renderWith('PaymentProcessingPage');
 
 		return new Payment_Processing($form);
 	}
-	
+
 	protected function PaymentForm() {
 		Requirements::javascript(THIRDPARTY_DIR . '/jquery/jquery.js');
 
@@ -97,9 +97,9 @@ class BuckarooPayment extends Payment {
 				});
 			</script>
 HTML;
-	} 
+	}
 
-	
+
 	function getPaymentFormFields() {
 		$logo = '<img src="' . self::$logo . '" alt="'._t('BuckarooPayment.POWEREDBY',"Credit card payments powered by Buckaroo").'"/>';
 		$privacyLink = '<a href="' . self::$privacy_link . '" target="_blank" title="'._t('BuckarooPayment.READPRIVACY',"Read Buckaroo's privacy policy").'">' . $logo . '</a><br/>';
@@ -107,7 +107,7 @@ HTML;
 			new LiteralField('BuckarooInfo', $privacyLink),
 			new LiteralField(
 				'BuckarooPaymentsList',
-				
+
 				//TODO: these methods aren't available in all countries
 				'<img src="payment/images/payments/methods/visa.jpg" alt="Visa"/>' .
 				'<img src="payment/images/payments/methods/mastercard.jpg" alt="MasterCard"/>' .
@@ -127,7 +127,7 @@ class BuckarooPayment_Handler extends Controller {
 	static $order_param = 'order';
 
 	protected $payment;
-	
+
 	function init() {
 		parent::init();
 		$paymentID = $this->request->getVar(self::$payment_param);
@@ -143,7 +143,7 @@ class BuckarooPayment_Handler extends Controller {
 			}
 		}
 	}
-	
+
 	function confirm() {
 		if($this->payment) {
 			$this->payment->Status = 'Success';
@@ -152,7 +152,7 @@ class BuckarooPayment_Handler extends Controller {
 		}
 		return array();
 	}
-	
+
 	function cancel() {
 		if($this->payment) {
 			$this->payment->Status = 'Failure';
@@ -161,7 +161,7 @@ class BuckarooPayment_Handler extends Controller {
 		}
 		return array();
 	}
-	
+
 	function doRedirect() {
 		$object = $this->payment->PaidObject();
 		$link = $object ? $object->Link() : Director::absoluteURL('home', true);
