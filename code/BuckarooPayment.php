@@ -11,7 +11,7 @@ class BuckarooPayment extends Payment {
 	);
 
 	// Logo & Privacy Link
-	protected static $logo = 'payment_buckaroo/images/logo.jpg';
+	protected static $logo = 'payment_buckaroo/images/logo_small.png';
 	protected static $privacy_link = 'http://www.buckaroo.nl/zakelijk/over-ons/disclaimer.aspx';
 
 	// URLs
