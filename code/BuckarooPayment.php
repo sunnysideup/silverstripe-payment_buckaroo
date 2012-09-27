@@ -73,7 +73,7 @@ class BuckarooPayment extends Payment {
 		$items = $order->Items();
 		$inputs['brq_description'] = implode("\n", $items->map('ID', 'TableTitle'));
 
-		$signature = '';
+		$signature = $fields = '';
 		ksort($inputs);
 		foreach($inputs as $name => $value) {
 			$signature .= "$name$value";
