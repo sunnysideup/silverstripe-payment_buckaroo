@@ -32,6 +32,11 @@ class BuckarooPayment extends Payment {
 		self::$test_mode = $test_mode;
 	}
 	
+	function populateDefaults() {
+		parent::populateDefaults();
+		$this->Status = 'Pending';
+ 	}
+
 	function processPayment($data, $form) {
 		
 		// Checks credentials
