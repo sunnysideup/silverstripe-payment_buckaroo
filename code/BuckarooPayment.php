@@ -172,7 +172,7 @@ class BuckarooPayment_Handler extends Controller {
 	}
 
 	private static function action_link($action, BuckarooPayment $payment) {
-		$values = array(self::$payment_param => $payment->ID, self::$order_param -> $payment->OrderID);
+		$values = array(self::$payment_param => $payment->ID, self::$order_param => $payment->OrderID);
 		return "BuckarooPayment_Handler/$action?" . http_build_query($values);
 	}
 }
