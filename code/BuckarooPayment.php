@@ -15,8 +15,8 @@ class BuckarooPayment extends Payment {
 	protected static $privacy_link = 'http://www.buckaroo.nl/zakelijk/over-ons/disclaimer.aspx';
 	
 	// URLs
-	protected static $live_url = 'https://checkout.buckaroo.nl/html';
-	protected static $test_url = 'https://testcheckout.buckaroo.nl/html';
+	protected static $live_url = 'https://checkout.buckaroo.nl/html/';
+	protected static $test_url = 'https://testcheckout.buckaroo.nl/html/';
 
 	// Redirect URLs
 	protected static $confirm_url = 'BuckarooPaymentPayment_Handler/confirm';
