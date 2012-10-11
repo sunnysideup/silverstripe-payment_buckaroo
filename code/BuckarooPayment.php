@@ -51,11 +51,14 @@ class BuckarooPayment extends Payment {
 			user_error('You are attempting to make a payment without the necessary credentials set', E_USER_ERROR);
 		}
 
+		$this->Method = $data['Method'];
+		$this->write();
+
 		$page = new Page();
 
 		$page->Title = 'Redirection to Buckaroo...';
 		$page->Logo = '<img src="' . self::$logo . '" alt="Payments powered by Buckaroo" class="logo buckarooLogo"/>';
-		$page->Form = $this->PaymentForm();
+		$page->Form = $this->PaymentForm($data);
 
 		$controller = new Page_Controller($page);
 
@@ -64,7 +67,7 @@ class BuckarooPayment extends Payment {
 		return new Payment_Processing($form);
 	}
 
-	protected function PaymentForm() {
+	protected function PaymentForm($data) {
 		Requirements::javascript(THIRDPARTY_DIR . '/jquery/jquery.js');
 
 		$url = self::$test_mode ? self::$test_url : self::$live_url;
@@ -76,6 +79,8 @@ class BuckarooPayment extends Payment {
 
 		$inputs['brq_return'] = Director::absoluteURL(BuckarooPayment_Handler::confirm_link($this), true);
 		$inputs['brq_returncancel'] = $inputs['brq_returnerror'] = $inputs['brq_returnreject'] = Director::absoluteURL(BuckarooPayment_Handler::cancel_link($this), true);
+
+		$inputs['brq_payment_method'] = $data['Method'];
 
 		$order = $this->Order();
 		$items = $order->Items();
