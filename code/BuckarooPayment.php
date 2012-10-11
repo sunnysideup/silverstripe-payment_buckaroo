@@ -12,7 +12,10 @@ class BuckarooPayment extends Payment {
 
 	// Logo & Privacy Link
 	protected static $logo = 'payment_buckaroo/images/logo_small.png';
+		static function set_logo($s) {self::$logo = $s;}
+
 	protected static $privacy_link = 'http://www.buckaroo.nl/zakelijk/over-ons/disclaimer.aspx';
+		static function set_privacy_link($s) {self::$privacy_link = $s;}
 
 	// URLs
 	protected static $live_url = 'https://checkout.buckaroo.nl/html/';
@@ -32,6 +35,18 @@ class BuckarooPayment extends Payment {
 	static function set_test_mode($test_mode) {
 		self::$test_mode = $test_mode;
 	}
+
+	/**
+	 * List of options where the user can select their preferred payment method.
+	 * should be formatted like this:
+	 * [payment_method_code] => [long_name]
+	 * e.g.
+	 * "ideal" => "pay using your bank"
+	 * @var Array
+	 */
+	protected static $payment_method_options_field_data = array();
+	static function set_payment_method_options_field_data($a) {self::$payment_method_options_field_data = $a;}
+	static function get_payment_method_options_field_data() {return self::$payment_method_options_field_data;}
 /*
 	static function set_payment_methods(array $payment_methods) {
 		foreach($payment_methods as $payment_method) {
@@ -51,7 +66,7 @@ class BuckarooPayment extends Payment {
 			user_error('You are attempting to make a payment without the necessary credentials set', E_USER_ERROR);
 		}
 
-		$this->Method = $data['Method'];
+		$this->Method = Convert::raw2sql($data['BuckarooMethod']);
 		$this->write();
 
 		$page = new Page();
@@ -80,7 +95,7 @@ class BuckarooPayment extends Payment {
 		$inputs['brq_return'] = Director::absoluteURL(BuckarooPayment_Handler::confirm_link($this), true);
 		$inputs['brq_returncancel'] = $inputs['brq_returnerror'] = $inputs['brq_returnreject'] = Director::absoluteURL(BuckarooPayment_Handler::cancel_link($this), true);
 
-		$inputs['brq_payment_method'] = $data['Method'];
+		$inputs['brq_payment_method'] = $data['BuckarooMethod'];
 
 		$order = $this->Order();
 		$items = $order->Items();
@@ -113,16 +128,35 @@ HTML;
 
 
 	function getPaymentFormFields() {
-		return new FieldSet(
-			new OptionsetField('Method', '', array(
-				'ideal' => '<span class="methodTitle">iDEAL <span class="fees">+ &euro; 0.50</span></span><span class="methodImages"><img src="http://buckaroo.nl/ims/logo_abn_s.gif"><img src="http://buckaroo.nl/ims/logo_asn_s.gif"><img src="http://buckaroo.nl/ims/logo_friesland_s.gif"><img src="http://buckaroo.nl/ims/logo_ing_s.gif"><img src="http://demo.buckaroo.nl/ims/logo_lanschot_s.gif"><img src="http://buckaroo.nl/ims/logo_rabo_s.gif"><img src="http://buckaroo.nl/ims/logo_sns_s.gif"><img src="http://buckaroo.nl/ims/logo_triodos.gif"></span>',
-				'paypal' => '<span class="methodTitle">Paypal <span class="fees">+ &euro; 0.90</span></span><span class="methodImages"><img src="http://buckaroo.nl/ims/logo_paypal_s.gif"></span>'
-			),
-			'ideal')
-		);
+		if(is_array(self::$payment_method_options_field_data) && count(self::$payment_method_options_field_data)) {
+			return new FieldSet(
+				new OptionsetField(
+					'BuckarooMethod',
+					'',
+					self::$payment_method_options_field_data,
+					//get the first key as the default value...
+					array_shift(array_flip(self::$payment_method_options_field_data))
+				)
+			);
+		}
+		else {
+			return new FieldSet();
+		}
 	}
 
-	function getPaymentFormRequirements() {}
+	function getPaymentFormRequirements() {
+		//this is giving weird errors - needs to be checked.
+		return null;
+		if($this->hasPaymentMethodSelectors()) {
+			return array("BuckarooMethod");
+		}
+		return null;
+	}
+
+	protected function hasPaymentMethodSelectors(){
+		return is_array(self::$payment_method_options_field_data) && count(self::$payment_method_options_field_data);
+	}
+
 }
 
 class BuckarooPayment_Handler extends Controller {
