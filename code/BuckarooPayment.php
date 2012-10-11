@@ -116,7 +116,7 @@ HTML;
 		);
 	}
 
-	function getPaymentFormRequirements() {return new RequiredField('Method');}
+	function getPaymentFormRequirements() {return new RequiredFields('Method');}
 }
 
 class BuckarooPayment_Handler extends Controller {
