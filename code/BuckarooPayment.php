@@ -22,6 +22,7 @@ class BuckarooPayment extends Payment {
 	protected static $website_key;
 	protected static $signature_secret_key;
 	protected static $test_mode = true;
+	protected static $payment_methods = array();
 
 	static function set_settings($website_key, $signature_secret_key) {
 		self::$website_key = $website_key;
@@ -31,7 +32,13 @@ class BuckarooPayment extends Payment {
 	static function set_test_mode($test_mode) {
 		self::$test_mode = $test_mode;
 	}
-
+/*
+	static function set_payment_methods(array $payment_methods) {
+		foreach($payment_methods as $payment_method) {
+			if
+		}
+	}
+*/
 	function populateDefaults() {
 		parent::populateDefaults();
 		$this->Status = 'Pending';
@@ -101,24 +108,15 @@ HTML;
 
 
 	function getPaymentFormFields() {
-		$logo = '<img src="' . self::$logo . '" alt="'._t('BuckarooPayment.POWEREDBY',"Credit card payments powered by Buckaroo").'"/>';
-		$privacyLink = '<a href="' . self::$privacy_link . '" target="_blank" title="'._t('BuckarooPayment.READPRIVACY',"Read Buckaroo's privacy policy").'">' . $logo . '</a><br/>';
 		return new FieldSet(
-			new LiteralField('BuckarooInfo', $privacyLink),
-			new LiteralField(
-				'BuckarooPaymentsList',
-
-				//TODO: these methods aren't available in all countries
-				'<img src="payment/images/payments/methods/visa.jpg" alt="Visa"/>' .
-				'<img src="payment/images/payments/methods/mastercard.jpg" alt="MasterCard"/>' .
-				'<img src="payment/images/payments/methods/american-express.gif" alt="American Express"/>' .
-				'<img src="payment/images/payments/methods/discover.jpg" alt="Discover"/>' .
-				'<img src="payment/images/payments/methods/paypal.jpg" alt="PayPal"/>'
-			)
+			new OptionsetField('Method', '', array(
+				'ideal' => 'iDEAL <span class="fees">+ 0.50</span>',
+				'paypal' => 'Paypal <span class="fees">+ 0.90</span>'
+			));
 		);
 	}
 
-	function getPaymentFormRequirements() {return null;}
+	function getPaymentFormRequirements() {return new RequiredField('Method');}
 }
 
 class BuckarooPayment_Handler extends Controller {
