@@ -110,8 +110,8 @@ HTML;
 	function getPaymentFormFields() {
 		return new FieldSet(
 			new OptionsetField('Method', '', array(
-				'ideal' => '<span class="methodTitle">iDEAL <span class="fees">+ 0.50</span></span><span class="methodImages"></span>',
-				'paypal' => '<span class="methodTitle">Paypal <span class="fees">+ 0.90</span></span><span class="methodImages"></span>'
+				'ideal' => '<span class="methodTitle">iDEAL <span class="fees">+ 0.50</span></span><span class="methodImages"><img src="http://buckaroo.nl/ims/logo_abn_s.gif"><img src="http://buckaroo.nl/ims/logo_asn_s.gif"><img src="http://buckaroo.nl/ims/logo_friesland_s.gif"><img src="http://buckaroo.nl/ims/logo_ing_s.gif"><img src="http://demo.buckaroo.nl/ims/logo_lanschot_s.gif"><img src="http://buckaroo.nl/ims/logo_rabo_s.gif"><img src="http://buckaroo.nl/ims/logo_sns_s.gif"><img src="http://buckaroo.nl/ims/logo_triodos.gif"></span>',
+				'paypal' => '<span class="methodTitle">Paypal <span class="fees">+ 0.90</span></span><span class="methodImages"><img src="http://buckaroo.nl/ims/logo_paypal_s.gif"></span>'
 			),
 			'ideal')
 		);
