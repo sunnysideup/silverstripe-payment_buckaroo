@@ -112,7 +112,7 @@ HTML;
 			new OptionsetField('Method', '', array(
 				'ideal' => 'iDEAL <span class="fees">+ 0.50</span>',
 				'paypal' => 'Paypal <span class="fees">+ 0.90</span>'
-			));
+			))
 		);
 	}
 
