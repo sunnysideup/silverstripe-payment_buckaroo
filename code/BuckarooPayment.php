@@ -110,8 +110,8 @@ HTML;
 	function getPaymentFormFields() {
 		return new FieldSet(
 			new OptionsetField('Method', '', array(
-				'ideal' => 'iDEAL <span class="fees">+ 0.50</span>',
-				'paypal' => 'Paypal <span class="fees">+ 0.90</span>'
+				'ideal' => '<span class="methodTitle">iDEAL <span class="fees">+ 0.50</span></span><span class="methodImages"></span>',
+				'paypal' => '<span class="methodTitle">Paypal <span class="fees">+ 0.90</span></span><span class="methodImages"></span>'
 			),
 			'ideal')
 		);
