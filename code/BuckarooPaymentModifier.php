@@ -17,8 +17,8 @@ class BuckarooPaymentModifier extends OrderModifier {
 	 * @var Array
 	 */
 	protected static $charges = array(
-		"Paypal" => 1,
-		"Ideal" => 2
+		'Paypal' => 1,
+		'Ideal' => 2
 	);
 	static function set_charges($a) {self::$charges = $a;}
 	static function get_charges() {return self::$charges;}
