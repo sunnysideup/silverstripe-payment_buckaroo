@@ -95,7 +95,13 @@ class BuckarooPayment extends Payment {
 		$inputs['brq_return'] = Director::absoluteURL(BuckarooPayment_Handler::confirm_link($this), true);
 		$inputs['brq_returncancel'] = $inputs['brq_returnerror'] = $inputs['brq_returnreject'] = Director::absoluteURL(BuckarooPayment_Handler::cancel_link($this), true);
 
-		$inputs['brq_payment_method'] = $data['BuckarooMethod'];
+		if(strpos($data['BuckarooMethod'], ',') === false) {
+			$inputs['brq_payment_method'] = $data['BuckarooMethod'];
+		}
+		else {
+			$inputs['brq_requestedservices'] = $data['BuckarooMethod'];
+		}
+		
 
 		$order = $this->Order();
 		$items = $order->Items();
