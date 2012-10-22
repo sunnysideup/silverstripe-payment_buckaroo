@@ -30,7 +30,7 @@ class BuckarooPaymentModifier extends OrderModifier {
 	public static $singular_name = "Buckaroo Payment Surcharge";
 		function i18n_singular_name() { return _t("BuckarooPaymentModifier.BUCKAROOPAYMENTMODIFIER", "Buckaroo Payment Surcharge");}
 
-	public static $plural_name = "Modifier Examples";
+	public static $plural_name = "Buckaroo Payment Surcharges";
 		function i18n_plural_name() { return _t("BuckarooPaymentModifier.BUCKAROOPAYMENTMODIFIERS", "Buckaroo Payment Surcharges");}
 
 // ######################################## *** other (non) static variables (e.g. protected static $special_name_for_something, protected $order)
@@ -41,7 +41,7 @@ class BuckarooPaymentModifier extends OrderModifier {
 
 
 	/**
-	 * allows you to save a new value to MyField
+	 * allows you to save a new value to Name
 	 * @param String $s
 	 * @param Boolean $write - write to database (you may want to set this to false if you do several updates)
 	 */
@@ -138,5 +138,24 @@ class BuckarooPaymentModifier extends OrderModifier {
 		return true;
 	}
 // ######################################## *** debug functions
+
+}
+
+class BuckarooPaymentModifier_Controller extends Controller {
+
+	function update($request) {
+		$order = ShoppingCart::current_order();
+		if($order) {
+			if($modifiers = $order->Modifiers("BuckarooPaymentModifier")) {
+				foreach($modifiers as $modifier) {
+					if($request->getVar("paymentoption")) {
+						$modifier->updateName(Convert::raw2sql($request->getVar("paymentoption")));
+					}
+				}
+				return ShoppingCart::singleton()->setMessageAndReturn(_t("BuckarooPaymentModifier.UPDATED", "Updated  payment method.", "good"));
+			}
+		}
+		return ShoppingCart::singleton()->setMessageAndReturn(_t("BuckarooPaymentModifier.NOTUPDATED", "Could not update payment method.", "bad"));
+	}
 
 }

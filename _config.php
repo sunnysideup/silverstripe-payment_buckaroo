@@ -1,5 +1,9 @@
 <?php
 
+Director::addRules(50, array(
+	'updatebuckaroopaymentchoice//$Action/$ID/$Batch' => 'BuckarooPaymentModifier_Controller',
+));
+
 //===================---------------- START ecommerce MODULE ----------------===================
 //MUST SET
 //BuckarooPayment::set_settings($website_key = "bla", $signature_secret_key = "foo");

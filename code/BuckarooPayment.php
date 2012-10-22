@@ -101,7 +101,7 @@ class BuckarooPayment extends Payment {
 		else {
 			$inputs['brq_requestedservices'] = $data['BuckarooMethod'];
 		}
-		
+
 
 		$order = $this->Order();
 		$items = $order->Items();
@@ -134,14 +134,26 @@ HTML;
 
 
 	function getPaymentFormFields() {
+		$ajaxObject = EcommerceConfigAjax::get_one(ShoppingCart::current_order());
+		$js = "EcomCart.synonyms[\"".$ajaxObject->TableTotalID()."\"] = \"#OrderForm_OrderForm_Amount, input[name='Amount']\"";
+		Requirements::javascript("payment_buckaroo/javascript/BuckarooPayment.js");
+		Requirements::customScript($js, "BuckarooPaymentModifier");
+		$value = array_shift(array_flip(self::$payment_method_options_field_data));
+		$order = ShoppingCart::current_order();
+		if($order) {
+			if($modifiers = $order->Modifiers("BuckarooPaymentModifier")) {
+				foreach($modifiers as $modifier) {
+					$value = $modifier->Name;
+				}
+			}
+		}
 		if(is_array(self::$payment_method_options_field_data) && count(self::$payment_method_options_field_data)) {
 			return new FieldSet(
 				new OptionsetField(
 					'BuckarooMethod',
 					'',
 					self::$payment_method_options_field_data,
-					//get the first key as the default value...
-					array_shift(array_flip(self::$payment_method_options_field_data))
+					$value
 				)
 			);
 		}
