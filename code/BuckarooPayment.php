@@ -135,7 +135,7 @@ HTML;
 
 	function getPaymentFormFields() {
 		$ajaxObject = EcommerceConfigAjax::get_one(ShoppingCart::current_order());
-		$js = "EcomCart.synonyms[\"".$ajaxObject->TableTotalID()."\"] = \"#OrderForm_OrderForm_Amount, input[name='Amount']\"";
+		$js = "EcomCart.add_synonym(\"".$ajaxObject->TableTotalID()."\", \"#OrderForm_OrderForm_Amount, input[name='Amount']\");";
 		Requirements::javascript("payment_buckaroo/javascript/BuckarooPayment.js");
 		Requirements::customScript($js, "BuckarooPaymentModifier");
 		$value = array_shift(array_flip(self::$payment_method_options_field_data));
