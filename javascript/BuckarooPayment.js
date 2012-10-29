@@ -11,7 +11,7 @@ jQuery(document).ready(
 					function(data){
 						EcomCart.setChanges(data);
 						jQuery("#OrderForm_OrderForm_Amount").removeClass("loading");
-						jQuery("#OrderForm_OrderForm .Actions input, #OrderForm_OrderForm .Actions button").attr("disabled", "");
+						jQuery("#OrderForm_OrderForm .Actions input, #OrderForm_OrderForm .Actions button").removeAttr("disabled");
 						if(jQuery("#OrderForm_OrderForm_Amount").html == "<i>opnieuw berekenen</i>") {
 							window.location.reload();
 						}
