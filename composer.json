@@ -1,5 +1,5 @@
 {
-	"name": "silverstripe/payment_buckaroo",
+	"name": "sunnysideup/payment_buckaroo",
 	"type": "silverstripe-module",
 	"description": "pay using the buckaroo payment gateway",
 	"homepage": "http://www.silverstripe-ecommerce.com",
