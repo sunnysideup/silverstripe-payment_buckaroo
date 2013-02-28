@@ -122,6 +122,7 @@ class BuckarooPayment extends Payment {
 		if($this->debug) {
 			echo "
 			<pre>
+			NOTE: ALL VALUES START AND END WITH |
 			---SIGNATURE INPUT---";
 			print_r("|".$signatureInput."|");
 			echo "
