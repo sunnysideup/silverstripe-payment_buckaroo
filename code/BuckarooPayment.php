@@ -5,6 +5,8 @@
  */
 class BuckarooPayment extends Payment {
 
+	protected static $debug = false;
+
 	static $db = array(
 		'TransactionID' => 'Varchar',
 		'Method' => 'Varchar'
