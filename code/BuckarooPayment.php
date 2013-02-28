@@ -107,7 +107,7 @@ class BuckarooPayment extends Payment {
 
 		$order = $this->Order();
 		$items = $order->Items();
-		$inputs['brq_description'] = implode("\n", $items->map('ID', 'TableTitle'));
+		$inputs['brq_description'] = "test"; //implode("\n", $items->map('ID', 'TableTitle'));
 
 		$signatureInput = $fields = '';
 		ksort($inputs);
@@ -117,7 +117,7 @@ class BuckarooPayment extends Payment {
 			$fields .= "<input type=\"hidden\" name=\"$name\" value=\"$ATT_value\"/>";
 		}
 
-		$signature = Convert::raw2att(sha1($signatureInput . self::$signature_secret_key));
+		$signature = sha1($signatureInput . self::$signature_secret_key);
 		$fields .= "<input type=\"hidden\" name=\"brq_signature\" value=\"$signature\"/>";
 		if($this->debug) {
 			echo "
