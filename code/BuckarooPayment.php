@@ -5,7 +5,7 @@
  */
 class BuckarooPayment extends Payment {
 
-	protected static $debug = false;
+	protected $debug = false;
 
 	static $db = array(
 		'TransactionID' => 'Varchar',
@@ -128,6 +128,7 @@ class BuckarooPayment extends Payment {
 			echo print_r($signature);
 			echo "<hr />SECRET KEY<hr />";
 			echo print_r(self::$signature_secret_key);
+			echo "<hr /><hr />";
 			user_error("END");
 		}
 		return <<<HTML
