@@ -129,7 +129,7 @@ class BuckarooPayment extends Payment {
 			echo "<hr />SECRET KEY<hr />";
 			echo print_r(self::$signature_secret_key);
 			echo "<hr /><hr />";
-			die("END IN BUCKAROOPAYMENT.PHP")
+			die("END IN BUCKAROOPAYMENT.PHP");
 		}
 		return <<<HTML
 			<form id="PaymentForm" method="post" action="$url">
