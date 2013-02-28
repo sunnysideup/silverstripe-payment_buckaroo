@@ -107,17 +107,27 @@ class BuckarooPayment extends Payment {
 		$items = $order->Items();
 		$inputs['brq_description'] = implode("\n", $items->map('ID', 'TableTitle'));
 
-		$signature = $fields = '';
+		$signatureInput = $fields = '';
 		ksort($inputs);
 		foreach($inputs as $name => $value) {
-			$signature .= "$name=$value";
+			$signatureInput .= "$name=$value";
 			$ATT_value = Convert::raw2att($value);
 			$fields .= "<input type=\"hidden\" name=\"$name\" value=\"$ATT_value\"/>";
 		}
 
-		$signature = Convert::raw2att(sha1($signature . self::$signature_secret_key));
+		$signature = Convert::raw2att(sha1($signatureInput . self::$signature_secret_key));
 		$fields .= "<input type=\"hidden\" name=\"brq_signature\" value=\"$signature\"/>";
-
+		if($this->debug) {
+			echo "<hr />SIGNATURE INPUT<hr />";
+			echo print_r($signatureInput);
+			echo "<hr />FORM FIELDS<hr />";
+			echo print_r($fields);
+			echo "<hr />SIGNATURE<hr />";
+			echo print_r($signature);
+			echo "<hr />SECRET KEY<hr />";
+			echo print_r(self::$signature_secret_key);
+			user_error("END");
+		}
 		return <<<HTML
 			<form id="PaymentForm" method="post" action="$url">
 				$fields
