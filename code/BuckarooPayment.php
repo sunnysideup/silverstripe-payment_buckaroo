@@ -120,15 +120,24 @@ class BuckarooPayment extends Payment {
 		$signature = Convert::raw2att(sha1($signatureInput . self::$signature_secret_key));
 		$fields .= "<input type=\"hidden\" name=\"brq_signature\" value=\"$signature\"/>";
 		if($this->debug) {
-			echo "<hr />SIGNATURE INPUT<hr />";
-			echo print_r($signatureInput);
-			echo "<hr />FORM FIELDS<hr />";
-			echo print_r($fields);
-			echo "<hr />SIGNATURE<hr />";
-			echo print_r($signature);
-			echo "<hr />SECRET KEY<hr />";
-			echo print_r(self::$signature_secret_key);
-			echo "<hr /><hr />";
+			echo "
+			<pre>
+			---SIGNATURE INPUT---";
+			print_r("|".$signatureInput."|");
+			echo "
+			FORM FIELDS
+			";
+			print_r("|".$fields."|");
+			echo "
+			SIGNATURE
+			";
+			print_r("|".$signature."|");
+			echo "
+			SECRET KEY
+			";
+			print_r("|".self::$signature_secret_key."|");
+			echo "
+			</pre>";
 			die("END IN BUCKAROOPAYMENT.PHP");
 		}
 		return <<<HTML
