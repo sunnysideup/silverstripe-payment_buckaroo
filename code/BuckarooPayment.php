@@ -107,7 +107,7 @@ class BuckarooPayment extends Payment {
 
 		$order = $this->Order();
 		$items = $order->Items();
-		$inputs['brq_description'] = "Order from ".; //implode("\n", $items->map('ID', 'TableTitle'));
+		$inputs['brq_description'] = "Order from ".Director::absoluteURL("/"); //implode("\n", $items->map('ID', 'TableTitle'));
 
 		$signatureInput = $fields = '';
 		ksort($inputs);
