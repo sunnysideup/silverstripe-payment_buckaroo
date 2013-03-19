@@ -89,7 +89,7 @@ class BuckarooPayment extends Payment {
 
 		$url = self::$test_mode ? self::$test_url : self::$live_url;
 
-		$inputs['brq_browseragent'] = self::$website_key;
+		$inputs['brq_browseragent'] = "XXX";
 		$inputs['brq_websitekey'] = self::$website_key;
 		$inputs['brq_amount'] = $this->Amount->Amount;
 		$inputs['brq_currency'] = $this->Amount->Currency;
