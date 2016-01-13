@@ -81,7 +81,7 @@ class BuckarooPayment extends Payment {
 
 		$form = $controller->renderWith('PaymentProcessingPage');
 
-		return new Payment_Processing($form);
+		return EcommercePayment_Processing::create($form);
 	}
 
 	protected function PaymentForm($data) {
