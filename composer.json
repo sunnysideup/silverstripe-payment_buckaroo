@@ -3,11 +3,13 @@
     "type": "silverstripe-module",
     "description": "pay using the buckaroo payment gateway",
     "keywords": [
+        "Silverstripe-CMS",
+        "CMS",
+        "Silverstripe",
         "ecommerce",
         "e-commerce",
         "shop",
-        "buckaroo",
-        "silverstripe"
+        "buckaroo"
     ],
     "license": "Sunny Side Up (BSD-3-Clause and CUSTOM)",
     "authors": [
@@ -20,6 +22,7 @@
     "require": {
         "php": ">=5.3.2",
         "silverstripe/framework": "~2.4",
-        "sunnysideup/ecommerce": "~2.4"
+        "sunnysideup/ecommerce": "~2.4",
+        "silverstripe/cms": "~2.4"
     }
 }

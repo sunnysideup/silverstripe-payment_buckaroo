@@ -1,7 +1,7 @@
 <?php
 
 Director::addRules(50, array(
-	'updatebuckaroopaymentchoice//$Action/$ID/$Batch' => 'BuckarooPaymentModifier_Controller',
+    'updatebuckaroopaymentchoice//$Action/$ID/$Batch' => 'BuckarooPaymentModifier_Controller',
 ));
 
 //===================---------------- START ecommerce MODULE ----------------===================
